@@ -71,7 +71,6 @@ class MyUpdatedConsumerAC(AsyncConsumer):
 class MyChatConsumerAC(AsyncConsumer):
     async def websocket_connect(self, event):
         self.group=self.scope['url_route']['kwargs'] ['groupName']
-        print('gorup name',self.group)
         await self.channel_layer.group_add(self.group,self.channel_name)
         await self.send({'type':'websocket.accept'})
         
