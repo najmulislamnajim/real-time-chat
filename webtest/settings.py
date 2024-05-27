@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import urlparse
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -89,11 +90,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REDIS_URL = 'redis://red-cpacohkf7o1s73aepp30:6379'
+parsed_url = urlparse(REDIS_URL)
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("realtimechatapi.onrender.com", 6379)],
+            "hosts": [(
+                parsed_url.hostname,
+                parsed_url.port,
+                {
+                    "password": parsed_url.password,
+                }
+            )],
         },
     },
 }
